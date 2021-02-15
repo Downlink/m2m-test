@@ -8,7 +8,7 @@
 'use strict';
 
 const os = require('os'), colors = require('colors');
-const {m2mUtil, client, device, sec} = require('./client.js');
+const {m2mUtil, client, device, sec, m2mTest} = require('./client.js');
 const m2mv = require('../package.json'), processArgs = process.argv.slice(2);
 var pl = {options:{}}, remoteServer = null, userSettings = null;
 
@@ -19,17 +19,17 @@ m2mUtil.st();
  */
 /* istanbul ignore next */
 const m2minfo = function(){
-console.log('\n***************************************');
-console.log('   m2m ver:', m2mv.version);
-console.log('   OS:', process.platform);
-console.log('   H/W type:', os.arch());
-if(pl.device){
-  console.log('   Application: device');
-}
-else {
-  console.log('   Application: client');
-}
-console.log('   Server:', colors.brightBlue(remoteServer), '\n***************************************');
+  console.log('\n***************************************');
+  console.log('   m2m ver:', m2mv.version);
+  console.log('   OS:', process.platform);
+  console.log('   H/W type:', os.arch());
+  if(pl.device){
+    console.log('   Application: device');
+  }
+  else {
+    console.log('   Application: client');
+  }
+  console.log('   Server:', colors.brightBlue(remoteServer), '\n***************************************');
 };
 
 /**
@@ -118,7 +118,7 @@ const Client = exports.Client = function(){
   if(arguments.length > 0 && typeof arguments[0] === 'object'){
     //sec.userOptionsValidate(arguments[0]);
     pl.options.userSettings = arguments[0];
-    if(m2mUtil.testOption.enable){
+    if(m2mTest.option.enabled){
       this.userSettings = arguments[0];
     }
   }
@@ -158,7 +158,7 @@ function connect(args, cb){
     remoteServer = m2mUtil.defaultNode;
   }
 
-  if(!m2mUtil.testOption.enable){
+  if(!m2mTest.option.enabled){
     m2minfo(pl);
   }
 

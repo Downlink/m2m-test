@@ -14,7 +14,7 @@ const _WebSocket = require('ws');
 const colors = require('colors');
 const inquirer = require('inquirer');
 const EventEmitter = require('events');
-class StateEmitter extends EventEmitter {}
+class StateEmitter extends EventEmitter {};
 const emitter = new StateEmitter();
 const m2mv = require('../package.json');
 const processArgs = process.argv.slice(2);
@@ -30,8 +30,7 @@ emitter.setMaxListeners(2);
  ****************************************/
 /* istanbul ignore next */
 var m2mUtil = exports.m2mUtil = (() => {
-  let d1 = null, d2 = null, testOption = {};
-  const defaultNode = "https://www.node-m2m.com", testEmitter = emitter; 
+  let d1 = null, d2 = null, defaultNode = "https://www.node-m2m.com"; 
   let ctkpath = 'node_modules/m2m/lib/sec/', ptk = ctkpath + 'ptk', rtk = ctkpath + 'tk', rpk = ctkpath + 'pk';
 
   function setSecTk(){
@@ -245,13 +244,10 @@ var m2mUtil = exports.m2mUtil = (() => {
     initSec: initSec,
     eventLog: eventLog,
     systemInfo: systemInfo,
-    testOption: testOption,
     defaultNode: defaultNode,
-    testEmitter: testEmitter,
     startConnect: startConnect,
     setDataEvent: setDataEvent,
     trackClientId: trackClientId,
-    setTestOption: setTestOption,
     getClientActiveLinkData: getClientActiveLinkData
   }
 
@@ -270,7 +266,7 @@ const client = exports.client = (() => {
   // validate remote device/server
   function validateDevice(args, next){
     td = td + 50;
-    if(m2mUtil.testOption.enable){
+    if(m2mTest.option.enabled){
       next();
     }  
     else{
@@ -368,7 +364,7 @@ const client = exports.client = (() => {
   }
 
   function testFunction(pl,eventName){
-    if(m2mUtil.testOption.enable){
+    if(m2mTest.option.enabled){
       if(pl.name === 'watch-fail' || pl.name === 'fail' || pl.name === 'test-fail'|| pl.name === 'error'){
         if(pl.unwatch){
           emitter.emit(eventName, { id:pl.id, unwatch:true, name:pl.name, error:'fail'});
@@ -435,7 +431,7 @@ const client = exports.client = (() => {
       emitter.on(eventName, clientChannelDataListener);
     }
 
-    if(m2mUtil.testOption.enable){
+    if(m2mTest.option.enabled){
       testFunction(pl,eventName);
     }
   }
@@ -482,7 +478,7 @@ const client = exports.client = (() => {
       });
     }
 
-    if(m2mUtil.testOption.enable){
+    if(m2mTest.option.enabled){
       testFunction(pl,eventName);
     }
   }  
@@ -1482,7 +1478,7 @@ const device = exports.device = (() => {
   }
  
   setTimeout(function(){
-    if(m2mUtil.testOption.enable){
+    if(m2mTest.option.enabled){
       exports.startWatch = startWatch;
       exports.removeDataEvent = removeDataEvent;
     }
@@ -1516,7 +1512,7 @@ const device = exports.device = (() => {
   }
   
   setTimeout(function(){
-    if(m2mUtil.testOption.enable){
+    if(m2mTest.option.enabled){
       exports.getChannelDataEvent = getChannelDataEvent;
     }
   }, 100); 
@@ -2008,7 +2004,7 @@ const device = exports.device = (() => {
 
   // gpio input monitoring using array-gpio for raspberry pi
   function setRpiGpioInput(args, eventName, cb){
-		if(m2mUtil.testOption.enable){
+		if(m2mTest.option.enabled){
       inputPin = 0;
       if(args.pin[0] === 41){
         inputPin = 1;
@@ -2096,7 +2092,7 @@ const device = exports.device = (() => {
   
   // gpio output control using array-gpio for raspberry pi
   function setRpiGpioOutput(args, eventName, cb){
-    if(m2mUtil.testOption.enable){
+    if(m2mTest.option.enabled){
       if(args.pin[0] === 43){
       	outputPin = 0;r = null;
       }
@@ -2321,7 +2317,7 @@ const device = exports.device = (() => {
     // system arch  
     let sa = null;
 
-    if(m2mUtil.testOption.enable && args.pin === 55){
+    if(m2mTest.option.enabled && args.pin === 55){
        sa = 'x64';
     }
     else{
@@ -2554,7 +2550,7 @@ const sec = exports.sec = (() => {
   function getEndPointStatus(rxd){
     if(rxd._pid === 'client-status'){
       let appIds = null;
-      if(m2mUtil.testOption.enable && rxd.options){
+      if(m2mTest.option.enabled && rxd.options){
         options = rxd.options
       }
       try{
@@ -2631,7 +2627,7 @@ const sec = exports.sec = (() => {
 
   function uploadCode(rxd){
     rxd.active = true;
-    if(m2mUtil.testOption.enable && Object.keys(rxd.options).length > 0){
+    if(m2mTest.option.enabled && Object.keys(rxd.options).length > 0){
       options = rxd.options;
     }
     if(rxd.uploadCode && options && options.m2mConfig.code){
@@ -2649,7 +2645,7 @@ const sec = exports.sec = (() => {
 
   function updateCode(rxd){
     rxd.active = true;
-    if(m2mUtil.testOption.enable && Object.keys(rxd.options).length > 0){
+    if(m2mTest.option.enabled && Object.keys(rxd.options).length > 0){
       options = rxd.options;
     }
     if(!rxd.appData){
@@ -2726,7 +2722,7 @@ const sec = exports.sec = (() => {
 
   function uploadEventLog(rxd){
     rxd.active = true;
-    if(m2mUtil.testOption.enable && Object.keys(rxd.options).length > 0){
+    if(m2mTest.option.enabled && Object.keys(rxd.options).length > 0){
       options = rxd.options;
     }
     if(rxd.uploadEventLog){
@@ -2797,19 +2793,19 @@ const sec = exports.sec = (() => {
       // userSettings
       if(args.userSettings && args.userSettings.name && args.userSettings.name.length > 20){
         args.userSettings.name = args.userSettings.name.slice(0, 20);
-        if(m2mUtil.testOption.enable) {
+        if(m2mTest.option.enabled) {
           throw new Error('Invalid option name length');
         }
       }
       if(args.userSettings && args.userSettings.location && args.userSettings.location.length > 20){
         args.userSettings.location = args.userSettings.location.slice(0, 20);
-        if(m2mUtil.testOption.enable) {
+        if(m2mTest.option.enabled) {
           throw new Error('Invalid option location name length');
         }
       }
       if(args.userSettings && args.userSettings.description && args.userSettings.description.length > 20){
         args.userSettings.description = args.userSettings.description.slice(0, 20);
-        if(m2mUtil.testOption.enable) {
+        if(m2mTest.option.enabled) {
           throw new Error('Invalid option description name length');
         }
       }
@@ -2900,7 +2896,7 @@ const sec = exports.sec = (() => {
    * get m2m package.json current configuration
    */
   function getPkgConfig(pl){
-    if(m2mUtil.testOption.enable){
+    if(m2mTest.option.enabled){
       return;
     }
 
@@ -3295,7 +3291,7 @@ const sec = exports.sec = (() => {
       }
     ];
 
-    if(m2mUtil.testOption.enable) {
+    if(m2mTest.option.enabled) {
       let user_val = validate_userid(args.userid);
       let pw_val = validate_password(args.pw);    
       let sc_val = validate_sc(args.sc);
@@ -3380,7 +3376,7 @@ const sec = exports.sec = (() => {
 
     websocket.setServer(args);
 
-    if(m2mUtil.testOption.enable) {
+    if(m2mTest.option.enabled) {
       if(cb){
         if(args && args.final){
           // continue
@@ -3440,7 +3436,7 @@ const sec = exports.sec = (() => {
           }
         }
       }
-      if(m2mUtil.testOption.enable) {
+      if(m2mTest.option.enabled) {
         if(args && args.final){
           process.exit(0);
         }
@@ -3462,22 +3458,22 @@ const sec = exports.sec = (() => {
         options = m2m.options;
       }
 
-      if(m2mUtil.testOption.enable && m2m.start){
+      if(m2mTest.option.enabled && m2m.start){
       	path = 'test/sec/test/start/tk';
       }
-      else if(m2mUtil.testOption.enable && m2m.restart){
+      else if(m2mTest.option.enabled && m2m.restart){
       	path = 'test/sec/test/restart/tk';
       }
-      else if(m2mUtil.testOption.enable && m2m.dtc){
+      else if(m2mTest.option.enabled && m2m.dtc){
       	path = 'test/sec/device/tk';
       }
-      else if(m2mUtil.testOption.enable && m2m.ctd){
+      else if(m2mTest.option.enabled && m2m.ctd){
       	path = 'test/sec/client/tk';
       }
-      else if(m2mUtil.testOption.enable && m2m.device){
+      else if(m2mTest.option.enabled && m2m.device){
       	path = 'test/sec/device/tk';
       }
-      else if(m2mUtil.testOption.enable && m2m.app){
+      else if(m2mTest.option.enabled && m2m.app){
         path = 'test/sec/client/tk';
       }
       else{
@@ -3490,7 +3486,7 @@ const sec = exports.sec = (() => {
         clientActiveLink = m2mUtil.getClientActiveLinkData();
       }
 
-      if(m2mUtil.testOption.enable && m2m.mid){
+      if(m2mTest.option.enabled && m2m.mid){
         delete data.id;
       }
       if(m2m.app && data.id && typeof data.id === 'number'){
@@ -3679,7 +3675,7 @@ const websocket = exports.websocket = (() => {
     
   function initCheck(){
     if(!reg){
-      if(m2mUtil.testOption.enable){
+      if(m2mTest.option.enabled){
         //throw new Error('process terminated');
       }
       else{
@@ -3763,7 +3759,7 @@ const websocket = exports.websocket = (() => {
       let timeout = setTimeout(connect, randomInterval, args, m2m, cb);
       wsConnectAttempt++;
 
-      if(m2mUtil.testOption.enable) {
+      if(m2mTest.option.enabled) {
         clearTimeout(timeout);
         if(cb){
           return cb(null, 'success');
@@ -3804,7 +3800,7 @@ const websocket = exports.websocket = (() => {
       else{
         clearInterval(dogTimer);
       }
-      if(m2mUtil.testOption.enable) {
+      if(m2mTest.option.enabled) {
         clearInterval(dogTimer);
     	}
     }, dogTimerInterval);
@@ -3882,13 +3878,13 @@ const websocket = exports.websocket = (() => {
   ******************************************/
   function DeviceRxData(rxd){
     if(rxd && rxd.id !== spl.id){
-      if(m2mUtil.testOption.enable) {
+      if(m2mTest.option.enabled) {
       	throw new Error('invalid id');
       }
       return;
     }
     if(rxd.src === 'device' || rxd.deviceResponse || rxd.device){
-      if(m2mUtil.testOption.enable) {
+      if(m2mTest.option.enabled) {
       	throw new Error('invalid payload');
       }
       return;
@@ -3947,7 +3943,7 @@ const websocket = exports.websocket = (() => {
   
   *******************************************/
   function ClientRxData(rxd){
-    if(m2mUtil.testOption.enable && spl.id !== rxd.id) {
+    if(m2mTest.option.enabled && spl.id !== rxd.id) {
       throw new Error('invalid id');
     }
     else if(rxd.activeStart){
@@ -3990,7 +3986,7 @@ const websocket = exports.websocket = (() => {
   }
 
   function initRxData(rxd, args, m2m, cb){
-    if(m2mUtil.testOption.enable) {
+    if(m2mTest.option.enabled) {
       if(rxd.ca){
         clientActive = rxd.ca;
       }
@@ -4077,7 +4073,7 @@ const websocket = exports.websocket = (() => {
           console.log('\n'+rxd.reason);
           m2mUtil.eventLog('connect fail', rxd.reason);
         }
-        if(m2mUtil.testOption.enable){
+        if(m2mTest.option.enabled){
           if(cb){
             return cb(null, rxd.reason);
           }
@@ -4090,7 +4086,7 @@ const websocket = exports.websocket = (() => {
       console.log('\nresult:', rxd.reason);
       console.log('Device id ' + spl.id + ' is not valid or is not registered. \n');
       m2mUtil.eventLog('Device id ' + spl.id + ' is not valid or is not registered.', rxd.code, rxd.reason);
-      if(m2mUtil.testOption.enable) {
+      if(m2mTest.option.enabled) {
         if(cb){
           return cb(null, rxd.reason);
         }
@@ -4101,7 +4097,7 @@ const websocket = exports.websocket = (() => {
       init(false);
       console.log('\nresult: success');
       if(rxd.reason){
-        if(m2mUtil.testOption.enable){
+        if(m2mTest.option.enabled){
           if(cb){
             return cb(null, rxd.reason);
           }
@@ -4152,7 +4148,7 @@ const websocket = exports.websocket = (() => {
     m2m.systemInfo = m2mUtil.systemInfo;
     args = setServer(args);
 
-    if(m2mUtil.testOption.enable) {
+    if(m2mTest.option.enabled) {
       if(cb){
         if(m2m.error){
           return cb(new Error(m2m.error), null);
@@ -4266,5 +4262,25 @@ const websocket = exports.websocket = (() => {
   }
 
 })(); // websocket
+
+/* m2m test option */
+/* istanbul ignore next */
+var m2mTest = exports.m2mTest = (() => {
+  let option = {}, testEmitter = emitter; 
+  
+  function enable(s) {
+    option.enabled = true;
+    if(s){
+      spl = s;
+    }
+  }
+
+  return {
+    option: option,
+    enable: enable,
+    testEmitter: testEmitter,
+  }
+
+})(); 
 
 
